@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>NekoScope TikTok OAuth Callback</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      max-width: 860px;
+      margin: 40px auto;
+      padding: 0 20px;
+      line-height: 1.65;
+      color: #222;
+    }
+    h1, h2 { color: #111; }
+    .box {
+      border: 1px solid #ddd;
+      border-radius: 12px;
+      padding: 18px 22px;
+      background: #fafafa;
+      overflow-wrap: anywhere;
+    }
+    code {
+      background: #f2f2f2;
+      padding: 2px 5px;
+      border-radius: 4px;
+    }
+    a { color: #0b57d0; }
+  </style>
+</head>
+<body>
+  <h1>NekoScope TikTok OAuth Callback</h1>
+  <p>
+    This page is used as the OAuth redirect URI for NekoScope TikTok Login Kit authorization.
+  </p>
+
+  <div class="box">
+    <h2>Callback Status</h2>
+    <p id="status">Checking callback parameters...</p>
+    <p id="details"></p>
+  </div>
+
+  <p>
+    After authorization, return to NekoScope to complete token exchange and continue the
+    read-only creator analytics workflow.
+  </p>
+
+  <p><a href="index.html">Back to NekoScope home</a></p>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const hasCode = params.has("code");
+    const hasState = params.has("state");
+    const hasError = params.has("error");
+    const status = document.getElementById("status");
+    const details = document.getElementById("details");
+
+    if (hasError) {
+      status.textContent = "TikTok returned an authorization error.";
+      details.textContent = "Error: " + (params.get("error") || "") + " " + (params.get("error_description") || "");
+    } else if (hasCode && hasState) {
+      status.textContent = "TikTok authorization callback received.";
+      details.textContent = "Authorization code and state were returned to this redirect URI. For security, the full code is not displayed on this page.";
+    } else {
+      status.textContent = "No TikTok authorization code was detected.";
+      details.textContent = "This page is intended to receive OAuth callback parameters from TikTok Login Kit.";
+    }
+  </script>
+</body>
+</html>
